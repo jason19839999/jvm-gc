@@ -1,0 +1,78 @@
+jstack 实战死循环与死锁  
+
+JVM参数类型：
+   标准参数
+   X参数
+     -Xint   : 解释执行
+     -Xcomp  : 第一次使用就编译成本地代码
+     -Xmixed : 混合模式，JVM自己来决定是否编译成本地代码
+
+   XX参数    :JVM调优和debug
+      Boolean类型
+      格式：-XX:[+-]<name>表示启用或者禁用name属性
+      比如：-XX:+UseConcMarkSweepGC
+            -XX:+UseG1GC
+      非Boolean类型
+      格式：-XX:<name> = <value>表示name属性的值是value
+      比如：-XX:MaxGCPauseMillis = 500
+             XX:GCTimeRatio = 19
+
+      -Xmx  -XX:MaxHeapSize       最大内存数
+      -Xms  -XX:InitialHeapSize   初始化内存大小
+
+查看JVM运行时参数
+    jps 类似linux的ps,查看java进程
+    jps -l 查看运行的java进程
+    [root@jason ~]# jps -l
+    1324 sun.tools.jps.Jps
+    查看最大内存
+    jinfo -flag MaxHeapSize 1324
+    jinfo -flags 1324 
+
+    查看垃圾回收器
+    jinfo -flag UseConcMarkSweepGC 3176
+    jinfo -flag UseG1GC 3176
+    jinfo -flag UseParallelGC  3176
+
+jstat查看JVM统计信息
+  类装载
+  垃圾收集（非常有用）
+  JIT编译
+
+jmap + MAT实战内存溢出
+  内存溢出映像文件自动导出
+  -XX:+HeapDumpOnOutOfMemoryError
+  -XX:HeapDumpPath = ./
+
+  jmap命令手动导出内存溢出映像文件
+  jps -l
+  16940 com.imooc.monitor.XXXXApplication  运行实例
+  jmap -help
+  jmap -dump:format=b,file=heap.hprof 16940
+
+   MAT分析内存溢出
+   将导出的内存溢出映像.hprof文件，用MAT打开分析，定位内存溢出代码。
+
+CMS的相关参数
+  -XX:ConcGCThreads:并发的GC线程数，和应用程序一起执行的并发线程数
+
+可视化GC日志分析工具
+ GCViewer 客户端
+
+Btrace监控调优
+  
+内存泄漏：是指一些对象的指针一直被应用程序占用，导致GC不能及时回收。进而导致内存资源不足而使应用程序性能下降或者不可用。
+
+垃圾回收算法 结合 垃圾回收器 看 会融会贯通。
+
+
+
+
+
+
+
+
+
+
+
+
